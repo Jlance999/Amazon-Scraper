@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import smtplib
 import time
+from decimal import Decimal
 
 URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
 
@@ -17,9 +18,9 @@ def check_price():
 
     title = soup2.find(id= "productTitle").get_text()
     price = soup2.find(id= "priceblock_ourprice").get_text()
-    converted_price = float(price[1:4])
+    converted_price = Decimal(price.strip('$'))
 
-    if(converted_price < 450):
+    if(converted_price < 425):
         send_mail()
 
     print(converted_price)
