@@ -26,6 +26,12 @@ def check_price():
     print(converted_price)
     print(title.strip())
 
+    #Toying with storing data to files. Not sure if I will use this or another method, but I want to be able to see price changes over time.
+    priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
+    priceData = open(priceDataDir, "a")
+    priceData.write('hi')
+    priceData.close()
+
 def send_mail():
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -45,7 +51,6 @@ def send_mail():
         msg
     )
     print('Email has been sent.')
-
 
 
 while(True):
