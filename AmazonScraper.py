@@ -4,6 +4,11 @@ import smtplib
 import time
 from decimal import Decimal
 
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib import style
+
+
 URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
 
 headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}
@@ -27,6 +32,7 @@ def check_price():
     print(title.strip())
 
     storeDataTxt(str(converted_price))
+    graph()
 
 def storeDataTxt (value):
     #Toying with storing data to txt files. Not sure if I will use this or another method, but I want to be able to see price changes over time.
@@ -36,6 +42,35 @@ def storeDataTxt (value):
     priceData.write('\n')
     priceData.close()    
 
+def graph():
+    style.use('fivethirtyeight')
+
+    fig = plt.figure() #creating a subplot
+    ax1=fig.add_subplot(1,1,1)
+
+    ani = animation.FuncAnimation(fig, animate, interval=1000) 
+    plt.show()
+
+def animate(i):
+
+    priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
+    data = open(priceDataDir,'r').read()
+    lines = data.split('\n')
+    xs = []
+    ys = []
+
+    for line in lines:
+        if len(line) > 1:
+            x, y = line.split(',') # Delimiter is comma
+            xs.append(float(x))
+            ys.append(float(y))
+
+    ax1.clear()
+    ax1.plot(xs,ys)
+
+    plt.xlabel('Date')
+    plt.ylabel('Price')
+    plt.title('Live graph with matplotlib')
 
 def send_mail():
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -45,7 +80,7 @@ def send_mail():
 
     server.login('jperkinator@gmail.com', 'xvxyiwxftvbmtjgx')
 
-    subject = 'Price fell down!'
+    subject = 'Price change!'
     body = 'Check the Amazon link https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
 
     msg = f"Subject: {subject}\n\n{body}"
