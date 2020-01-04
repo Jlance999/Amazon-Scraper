@@ -48,30 +48,29 @@ def graph():
     fig = plt.figure() #creating a subplot
     ax1=fig.add_subplot(1,1,1)
 
+    def animate(i):
+
+        priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
+        data = open(priceDataDir,'r').read()
+        lines = data.split('\n')
+        xs = []
+        ys = []
+
+        for line in lines:
+             if len(line) > 1:
+                x, y = line.split(',') # Delimiter is comma
+                xs.append(float(x))
+                ys.append(float(y))
+
+        ax1.clear()
+        ax1.plot(xs,ys)
+
+        plt.xlabel('Date')
+        plt.ylabel('Price')
+        plt.title('Live graph with matplotlib')
+    
     ani = animation.FuncAnimation(fig, animate, interval=1000) 
     plt.show()
-
-def animate(i):
-
-    priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
-    data = open(priceDataDir,'r').read()
-    lines = data.split('\n')
-    xs = []
-    ys = []
-
-    for line in lines:
-        if len(line) > 1:
-            x, y = line.split(',') # Delimiter is comma
-            xs.append(float(x))
-            ys.append(float(y))
-
-    ax1.clear()
-    ax1.plot(xs,ys)
-
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    plt.title('Live graph with matplotlib')
-
 def send_mail():
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
