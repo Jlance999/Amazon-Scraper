@@ -36,8 +36,12 @@ def check_price():
 
 def storeDataTxt (value):
     #Toying with storing data to txt files. Not sure if I will use this or another method, but I want to be able to see price changes over time.
+    
+    from time import strftime, localtime
     priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
     priceData = open(priceDataDir, "a")
+    priceData.write(strftime("%d%b%y", localtime()))
+    priceData.write(',')
     priceData.write(value)
     priceData.write('\n')
     priceData.close()    
@@ -59,7 +63,7 @@ def graph():
         for line in lines:
              if len(line) > 1:
                 x, y = line.split(',') # Delimiter is comma
-                xs.append(float(x))
+                xs.append((x))
                 ys.append(float(y))
 
         ax1.clear()
