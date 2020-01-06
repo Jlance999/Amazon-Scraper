@@ -13,6 +13,7 @@ URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075Z
 
 headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}
 
+
 def check_price():
 
     page = requests.get(URL, headers=headers)
@@ -75,6 +76,7 @@ def graph():
     
     ani = animation.FuncAnimation(fig, animate, interval=1000) 
     plt.show()
+
 def send_mail():
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -94,6 +96,7 @@ def send_mail():
         msg
     )
     print('Email has been sent.')
+
 
 
 while(True):
