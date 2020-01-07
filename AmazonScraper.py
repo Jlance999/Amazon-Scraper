@@ -8,13 +8,14 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import style
 
-
-URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
-
-headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}
+import tkinter as tk
 
 
 def check_price():
+
+    URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
+
+    headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}
 
     page = requests.get(URL, headers=headers)
 
@@ -72,9 +73,9 @@ def graph():
 
         plt.xlabel('Date')
         plt.ylabel('Price')
-        plt.title('Live graph with matplotlib')
+        plt.title('Live Graph')
     
-    ani = animation.FuncAnimation(fig, animate, interval=1000) 
+    ani=animation.FuncAnimation(fig, animate, interval=1000) 
     plt.show()
 
 def send_mail():
@@ -97,8 +98,41 @@ def send_mail():
     )
     print('Email has been sent.')
 
+root = tk.Tk()
+cHeight=500
+cWidth=800
+
+canvas = tk.Canvas(root, height=cHeight, width=cWidth)
+canvas.pack()
+
+frame = tk.Frame(root, bg='#1f1f1f')
+frame.place(relwidth=1, relheight=1)
+
+#Frame to hold image label
+frameInner = tk.Frame(frame, bg= "#282828")
+frameInner.place(anchor='nw', relwidth=.4, relheight=.5)
+
+#Stores command=function_name to run a function
+button = tk.Button(root, text="Confirm Change", bg='gray',)
+button.pack()
+
+labelPrice = tk.Label(frame, text= "Current Price: ", bg='#1f1f1f', fg='white')
+labelPrice.place(relx=.7, rely=0)
+
+labelNotifPrice = tk.Label(frame, text= "Notification Price: ", bg='#1f1f1f', fg='white')
+labelNotifPrice.pack()
 
 
-while(True):
-    check_price()
-    time.sleep(60*60)
+
+#Entry pane to change notification price.
+entry = tk.Entry(frame, bg='green')
+entry.pack()
+
+
+root.mainloop()
+
+
+##
+##while(True):
+##    check_price()
+##    time.sleep(60*60)
