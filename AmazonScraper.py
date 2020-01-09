@@ -10,22 +10,27 @@ from matplotlib import style
 
 import tkinter as tk
 
+import os
+
+mainDir = "C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\"
 
 def check_price():
 
     URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
 
-    headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'}
+    headers = {"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"}
 
     page = requests.get(URL, headers=headers)
 
     soup = BeautifulSoup(page.content, 'html.parser')
+    print(soup)
 
     soup2 = BeautifulSoup(soup.prettify(), "html.parser")
 
     title = soup2.find(id= "productTitle").get_text()
     price = soup2.find(id= "priceblock_ourprice").get_text()
     converted_price = Decimal(price.strip('$'))
+    stripped_title = title.strip()
 
     if(converted_price < 425):
         send_mail()
@@ -33,30 +38,42 @@ def check_price():
     print(converted_price)
     print(title.strip())
 
-    storeDataTxt(str(converted_price))
-    graph()
+    setupDir(str(stripped_title))
+    storeDataTxt(str(stripped_title),str(converted_price))
 
-def storeDataTxt (value):
+def storeDataTxt (product,price):
     #Toying with storing data to txt files. Not sure if I will use this or another method, but I want to be able to see price changes over time.
     
     from time import strftime, localtime
-    priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
+
+    titleDataDir=mainDir + '//' + product + '//' +"productData.txt"
+    titleData = open(titleDataDir, "a")
+    titleData.write(product)
+    titleData.close()
+
+    priceDataDir= mainDir + '//' + product + '//' +"priceData.txt"
     priceData = open(priceDataDir, "a")
     priceData.write(strftime("%d%b%y", localtime()))
     priceData.write(',')
-    priceData.write(value)
+    priceData.write(price)
     priceData.write('\n')
-    priceData.close()    
+    priceData.close()
+
+def setupDir(product):
+    
+    if (os.path.isdir('./'+ product) ==False):
+        os.mkdir(mainDir + product)
+        os.mkdir(mainDir + product + '//' +'productImages')
 
 def graph():
-    style.use('fivethirtyeight')
+    style.use('dark_background')
 
     fig = plt.figure() #creating a subplot
     ax1=fig.add_subplot(1,1,1)
 
     def animate(i):
 
-        priceDataDir="C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\priceData.txt"
+        priceDataDir= mainDir + ''
         data = open(priceDataDir,'r').read()
         lines = data.split('\n')
         xs = []
@@ -74,6 +91,10 @@ def graph():
         plt.xlabel('Date')
         plt.ylabel('Price')
         plt.title('Live Graph')
+
+        #adds major gridlines
+        ax1.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.5)
+
     
     ani=animation.FuncAnimation(fig, animate, interval=1000) 
     plt.show()
@@ -113,8 +134,8 @@ frameInner = tk.Frame(frame, bg= "#282828")
 frameInner.place(anchor='nw', relwidth=.4, relheight=.5)
 
 #Stores command=function_name to run a function
-button = tk.Button(root, text="Confirm Change", bg='gray',)
-button.pack()
+button = tk.Button(frame, text="See Graph", bg='gray', command=graph)
+button.place(anchor='s', relx=.5, rely=.99)
 
 labelPrice = tk.Label(frame, text= "Current Price: ", bg='#1f1f1f', fg='white')
 labelPrice.place(relx=.7, rely=0)
@@ -128,7 +149,9 @@ labelNotifPrice.pack()
 entry = tk.Entry(frame, bg='green')
 entry.pack()
 
-
+check_price()
+#os.mkdir(mainDir + product)
+#print("Folder "+ product +" added to program directory to store product data.")
 root.mainloop()
 
 
