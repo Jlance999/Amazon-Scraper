@@ -46,11 +46,6 @@ def storeDataTxt (product,price):
     
     from time import strftime, localtime
 
-    titleDataDir=mainDir + '//' + product + '//' +"productData.txt"
-    titleData = open(titleDataDir, "a")
-    titleData.write(product)
-    titleData.close()
-
     priceDataDir= mainDir + '//' + product + '//' +"priceData.txt"
     priceData = open(priceDataDir, "a")
     priceData.write(strftime("%d%b%y", localtime()))
@@ -64,6 +59,11 @@ def setupDir(product):
     if (os.path.isdir('./'+ product) ==False):
         os.mkdir(mainDir + product)
         os.mkdir(mainDir + product + '//' +'productImages')
+        
+        titleDataDir=mainDir + '//' + product + '//' +"productData.txt"
+        titleData = open(titleDataDir, "a")
+        titleData.write(product)
+        titleData.close()
 
 def graph():
     style.use('dark_background')
@@ -119,42 +119,43 @@ def send_mail():
     )
     print('Email has been sent.')
 
-root = tk.Tk()
-cHeight=500
-cWidth=800
+def GUI ():
 
-canvas = tk.Canvas(root, height=cHeight, width=cWidth)
-canvas.pack()
+    root = tk.Tk()
+    cHeight=500
+    cWidth=800
 
-frame = tk.Frame(root, bg='#1f1f1f')
-frame.place(relwidth=1, relheight=1)
+    canvas = tk.Canvas(root, height=cHeight, width=cWidth)
+    canvas.pack()
 
-#Frame to hold image label
-frameInner = tk.Frame(frame, bg= "#282828")
-frameInner.place(anchor='nw', relwidth=.4, relheight=.5)
+    frame = tk.Frame(root, bg='#1f1f1f')
+    frame.place(relwidth=1, relheight=1)
 
-#Stores command=function_name to run a function
-button = tk.Button(frame, text="See Graph", bg='gray', command=graph)
-button.place(anchor='s', relx=.5, rely=.99)
+    #Frame to hold image label
+    frameInner = tk.Frame(frame, bg= "#282828")
+    frameInner.place(anchor='nw', relwidth=.4, relheight=.5)
 
-labelPrice = tk.Label(frame, text= "Current Price: ", bg='#1f1f1f', fg='white')
-labelPrice.place(relx=.7, rely=0)
+    #Stores command=function_name to run a function
+    button = tk.Button(frame, text="See Graph", bg='gray', command=graph)
+    button.place(anchor='s', relx=.5, rely=.99)
 
-labelNotifPrice = tk.Label(frame, text= "Notification Price: ", bg='#1f1f1f', fg='white')
-labelNotifPrice.pack()
+    labelPrice = tk.Label(frame, text= "Current Price: ", bg='#1f1f1f', fg='white')
+    labelPrice.place(relx=.7, rely=0)
 
-
-
-#Entry pane to change notification price.
-entry = tk.Entry(frame, bg='green')
-entry.pack()
-
-check_price()
-#os.mkdir(mainDir + product)
-#print("Folder "+ product +" added to program directory to store product data.")
-root.mainloop()
+    labelNotifPrice = tk.Label(frame, text= "Notification Price: ", bg='#1f1f1f', fg='white')
+    labelNotifPrice.pack()
 
 
+
+    #Entry pane to change notification price.
+    entry = tk.Entry(frame, bg='green')
+    entry.pack()
+
+    #os.mkdir(mainDir + product)
+    #print("Folder "+ product +" added to program directory to store product data.")
+    root.mainloop()
+
+GUI()
 ##
 ##while(True):
 ##    check_price()
