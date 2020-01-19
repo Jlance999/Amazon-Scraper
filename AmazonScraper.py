@@ -13,7 +13,7 @@ import tkinter as tk
 import os
 
 mainDir = "C:\\Users\\Jeremy\\Documents\\GitHub\\Amazon Scraper\\"
-
+    
 def check_price():
     
     URL = 'https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
@@ -57,7 +57,6 @@ def check_price():
     setupDir(str(stripped_title))
     storeDataTxt(str(stripped_title),str(converted_price))
     storeImagePng(str(stripped_title),imgsurl)
-
 
 def storeImagePng (product,imgsurl):
 
@@ -200,7 +199,7 @@ def GUI ():
     labelImage.pack()
 
   
-    #Stores command=function_name to run a function
+    # Stores command=function_name to run a function
     button = tk.Button(frame, text="See Graph", bg='gray', command=graph)
     button.place(anchor='s', relx=.5, rely=.99)
 
@@ -212,7 +211,7 @@ def GUI ():
 
 
 
-    #Entry pane to change notification price.
+    # Entry pane to change notification price.
     entry = tk.Entry(frame, bg='green')
     entry.pack()
 
@@ -222,7 +221,7 @@ def GUI ():
 
 GUI()
 
-##
+
 ##while(True):
 ##    check_price()
 ##    time.sleep(60*60)
