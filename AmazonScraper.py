@@ -133,7 +133,7 @@ def send_mail():
     server.starttls()
     server.ehlo()
 
-    server.login('jperkinator@gmail.com', 'xvxyiwxftvbmtjgx')
+    server.login('jperkinator@gmail.com', SERVER_PW)
 
     subject = 'Price change!'
     body = 'Check the Amazon link https://www.amazon.com/Synology-DS418play-Station-4-bay-Diskless/dp/B075ZNKCK4/ref=cm_cr_arp_d_product_sims?ie=UTF8'
